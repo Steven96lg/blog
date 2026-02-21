@@ -8,6 +8,14 @@ const ciberseguridadPosts = (await getCollection('ciberseguridad')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 
+// Obtener categorías únicas de los posts
+const uniqueCategories = Array.from(
+  new Set(ciberseguridadPosts.map(post => post.data.tag))
+).sort();
+
+// Agregar "Todos" al inicio de las categorías
+const categories = ['Todos', ...uniqueCategories];
+
 // Íconos disponibles para el timeline
 const icons = [
   {
@@ -34,7 +42,7 @@ const getIcon = (index: number) => icons[index % icons.length].svg;
 		<div class="general-content">
 			<div class="ciberseguridad-header">
 				<div class="title-content">
-					<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#00e699" d="M12 22q-3.475-.875-5.738-3.988T4 11.1V5l8-3l8 3v6.1q0 .25-.012.5t-.038.5q-.225-.05-.462-.075T19 12q-.275 0-.525.025t-.525.075q.025-.25.038-.487T18 11.1V6.375l-6-2.25l-6 2.25V11.1q0 3.025 1.7 5.5t4.3 3.3q.525-.175 1.025-.425T14 18.9v2.35q-.475.25-.975.438T12 22m4 0v-5h1v-1q0-.825.588-1.412T19 14t1.413.588T21 16v1h1v5zm2-5h2v-1q0-.425-.288-.712T19 15t-.712.288T18 16z"/></svg><h1> Ciberseguridad Roadmap</h1>
+					<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#00e699" d="M12 22q-3.475-.875-5.738-3.988T4 11.1V5l8-3l8 3v6.1q0 .25-.012.5t-.038.5q-.225-.05-.462-.075T19 12q-.275 0-.525.025t-.525.075q.025-.25.038-.487T18 11.1V6.375l-6-2.25l-6 2.25V11.1q0 3.025 1.7 5.5t4.3 3.3q.525-.175 1.025-.425T14 18.9v2.35q-.475.25-.975.438T12 22m4 0v-5h1v-1q0-.825.588-1.412T19 14t1.413.588T21 16v1h1v5zm2-5h2v-1q0-.425-.288-.712T19 15t-.712.288T18 16z"/></svg><h1> Cybersecurity Roadmap</h1>
 				</div>
 				<h2>Mi camino en Ciberseguridad.</h2>
 				<p class="header-description">En esta sección documento el camino que estoy siguiendo para formarme en ciberseguridad: desde los fundamentos de redes y Linux, hasta herramientas, conceptos de defensa y buenas prácticas del mundo real. Aquí comparto lo que estudio, cómo lo aplico y las lecciones que voy aprendiendo en el proceso.</p>
@@ -43,15 +51,13 @@ const getIcon = (index: number) => icons[index % icons.length].svg;
 			<div class="main-cyber-content">
 				<div class="index-content">
 					<p class="title-index">Temas</p>
-					<IndexCyberList />
+					<IndexCyberList categories={categories} />
 				</div>
 				<div class="ciberseguridad-posts">
 					<div class="timeline">
 						{ciberseguridadPosts.map((post, index) => (
-							<div class={`timeline-item ${index === ciberseguridadPosts.length - 1 ? 'last-item' : ''}`}>
-								<div class="timeline-marker">
-									<Fragment set:html={getIcon(index)} />
-								</div>
+							<div class={`timeline-item ${index === ciberseguridadPosts.length - 1 ? 'last-item' : ''}`} data-tag={post.data.tag}>
+								<div class="timeline-marker" set:html={getIcon(index)}></div>
 								<div class="timeline-content">
 									<div class="timeline-date">
 										{new Date(post.data.pubDate).toLocaleDateString('es-MX', { month: 'short', year: '2-digit' }).toUpperCase()}
@@ -155,7 +161,7 @@ const getIcon = (index: number) => icons[index % icons.length].svg;
 		content: '';
 		position: absolute;
 		left: 26px;
-		top: 0;
+		top: 55px;
 		bottom: 0;
 		width: 2px;
 		background: linear-gradient(to bottom, #00e699, #00a86b);
@@ -368,5 +374,42 @@ const getIcon = (index: number) => icons[index % icons.length].svg;
 		.timeline-item {
 			gap: 15px;
 		}
+	}
+
+	/* Animaciones para el filtrado de categorías */
+	.timeline {
+		transition: opacity 0.6s ease 0.3s;
+	}
+
+	.timeline.fade-out-timeline {
+		opacity: 0;
+	}
+
+	.timeline.fade-in-timeline {
+		opacity: 1;
+	}
+
+	.timeline::before {
+		transition: opacity 0.6s ease;
+	}
+
+	.timeline.fade-out-timeline::before {
+		opacity: 0;
+	}
+
+	.timeline.fade-in-timeline::before {
+		opacity: 1;
+	}
+
+	.timeline-marker {
+		transition: opacity 0.6s ease;
+	}
+
+	.timeline.fade-out-timeline .timeline-marker {
+		opacity: 0;
+	}
+
+	.timeline.fade-in-timeline .timeline-marker {
+		opacity: 1;
 	}
 </style>

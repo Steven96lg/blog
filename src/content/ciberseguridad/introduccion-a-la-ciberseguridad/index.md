@@ -2,7 +2,7 @@
 title: Introducción a la Ciberseguridad
 pubDate: 2024-02-02
 description: Un primer vistazo al mundo de la ciberseguridad, sus conceptos fundamentales y por qué es importante en el desarrollo web.
-tag: Fundamentos
+tag: Redes
 image: ''
 ---
 

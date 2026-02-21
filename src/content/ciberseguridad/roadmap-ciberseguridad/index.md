@@ -2,7 +2,7 @@
 title: Mi Roadmap en Ciberseguridad
 pubDate: 2024-02-01
 description: Descripción de mi camino y aprendizaje en ciberseguridad, desde los conceptos fundamentales hasta especializaciones avanzadas.
-tag: Ciberseguridad
+tag: Linux
 image: ''
 ---
 
